@@ -3467,9 +3467,10 @@
         border: 1px solid rgba(255, 255, 255, 0.05);
         border-radius: 16px;
         overflow: hidden;
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
         will-change: transform;
+        z-index: 999999;
+        position: static;
+        transform: none;
       }
 
       .cart-sidebar-header {
@@ -4729,7 +4730,7 @@
       msg += 'Forma de pago: ' + paymentMethod + '\n';
       if (paymentMethod === 'Efectivo') { msg += 'Envío no incluido.'; }
       navigator.clipboard.writeText(msg).catch(function () { });
-      window.open('https://wa.me/543434573419?text=' + encodeURIComponent(msg), '_blank');
+      window.open('https://wa.link/tmz61f?text=' + encodeURIComponent(msg), '_blank');
     }
     window.sendWhatsApp = sendWhatsApp;
     function initParticles() {
@@ -4749,42 +4750,6 @@
       init(); animate(); window.addEventListener('resize', resize);
     }
     setTimeout(() => { renderProducts(); updateCart(); initParticles(); }, 500);
-
-    // ── CART SIDEBAR SMOOTH STICKY FOLLOW ──
-    (function () {
-      const section = document.querySelector('.armatubox-section');
-      const cart = document.getElementById('cartSidebar');
-      if (!section || !cart) return;
-
-      const MARGIN_TOP = 24;    // px del tope del viewport
-      const MARGIN_BOTTOM = 24; // margen antes de salir de la sección
-      const LERP_SPEED = 0.10;  // 0=sin movimiento, 1=instantáneo
-      let currentY = 0;
-
-      function lerp(a, b, t) { return a + (b - a) * t; }
-
-      function tick() {
-        const sr = section.getBoundingClientRect();
-        const cartH = cart.offsetHeight;
-        let target = 0;
-
-        if (sr.top < MARGIN_TOP) {
-          // La sección pasó el top del viewport: empezar a seguir
-          target = MARGIN_TOP - sr.top;
-
-          // Límite inferior: el cart no puede salir de la sección
-          const maxY = sr.height - cartH - MARGIN_TOP - MARGIN_BOTTOM;
-          target = Math.min(Math.max(target, 0), Math.max(maxY, 0));
-        }
-
-        currentY = lerp(currentY, target, LERP_SPEED);
-        cart.style.transform = 'translateY(' + currentY.toFixed(2) + 'px)';
-
-        requestAnimationFrame(tick);
-      }
-
-      tick();
-    })();
   </script>
 </body>
 
